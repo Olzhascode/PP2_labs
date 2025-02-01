@@ -1,22 +1,60 @@
-#Python Lambda
+#Classes and Objects
 
-#Syntax
-#lambda arguments : expression
+#Create Class
+class MyClass:
+  x = 5
 
-x = lambda a : a + 10
-print(x(5))
 
-y = lambda a, b : a * b
-print(y(5, 6))
+#Create Object
+p1 = MyClass()
+print(p1.x)
 
-z = lambda a, b, c : a + b + c
-print(z(5, 6, 2))
 
-def myfunc(n):
-  return lambda a : a * n
+#__init__
+class Person1:
+  def __init__(self, name, age):
+    self.name = name
+    self.age = age
 
-mydoubler = myfunc(2)
-mytripler = myfunc(3)
+person1 = Person1("John", 36)
 
-print(mydoubler(11))
-print(mytripler(11))
+print(person1.name)
+print(person1.age)
+
+
+#__str__
+class Person2:
+  def __init__(self, name, age):
+    self.name = name
+    self.age = age
+
+person2 = Person2("John", 36)
+
+print(person2)
+
+class Person3:
+  def __init__(self, name, age):
+    self.name = name
+    self.age = age
+
+  def __str__(self):
+    return f"{self.name}({self.age})"
+
+person3 = Person3("John", 36)
+
+print(person3)
+
+
+#Object Methods
+class newPerson:
+  def __init__(self, name, age):
+    self.name = name
+    self.age = age
+
+  def myfunction(self):
+    print("Hello my name is " + self.name)
+
+newperson = newPerson("John", 36)
+newperson.myfunction()
+
+
