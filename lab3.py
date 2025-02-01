@@ -1,60 +1,52 @@
-#Classes and Objects
+#Inheritance
 
-#Create Class
-class MyClass:
-  x = 5
+class Person:
+  def __init__(self, fname, lname):
+    self.firstname = fname
+    self.lastname = lname
 
+  def printname(self):
+    print(self.firstname, self.lastname)
 
-#Create Object
-p1 = MyClass()
-print(p1.x)
+#Use the Person class to create an object, and then execute the printname method:
 
+x = Person("John", "Doe")
+x.printname()
 
-#__init__
-class Person1:
-  def __init__(self, name, age):
-    self.name = name
-    self.age = age
+class Student(Person):
+  pass
 
-person1 = Person1("John", 36)
-
-print(person1.name)
-print(person1.age)
+x = Student("Mike", "Olsen")
+x.printname()
 
 
-#__str__
-class Person2:
-  def __init__(self, name, age):
-    self.name = name
-    self.age = age
+#Add the __init__() Function
 
-person2 = Person2("John", 36)
+class KBTU_Student(Person):
+   def __init__(self, fname, lname):
+     self.firstname = fname
+     self.lastname = lname
+  
+   def printStudent_name(self):
+     print(self.firstname, self.lastname)
 
-print(person2)
+#Use the super() Function
+class Student(Person):
+  def __init__(self, fname, lname, year):
+    super().__init__(fname, lname)
+    self.graduationyear = year
 
-class Person3:
-  def __init__(self, name, age):
-    self.name = name
-    self.age = age
+y = Student('Jake', 'Brown', 2028)
 
-  def __str__(self):
-    return f"{self.name}({self.age})"
+#Add Methods
 
-person3 = Person3("John", 36)
+class Student(Person):
+  def __init__(self, fname, lname, year):
+    super().__init__(fname, lname)
+    self.graduationyear = year
 
-print(person3)
+  def welcome(self):
+    print("Welcome", self.firstname, self.lastname, "to the class of", self.graduationyear)
 
-
-#Object Methods
-class newPerson:
-  def __init__(self, name, age):
-    self.name = name
-    self.age = age
-
-  def myfunction(self):
-    print("Hello my name is " + self.name)
-
-newperson = newPerson("John", 36)
-newperson.myfunction()
-
-
+x = Student("Jake", "Brown", 2028)
+x.welcome()
