@@ -1,52 +1,33 @@
 #task 1
-def generatorTillN(n):
-    for i in range (1, n):
-        print(i**2)
+import datetime
 
-n = int(input("Enter number n: "))
-generatorTillN(n)
 print()
-
+today = datetime.date.today()
+ordinal = today.toordinal()
+five_days_ago_ordinal = ordinal - 5
+five_days_ago = datetime.date.fromordinal(five_days_ago_ordinal)
+print("Five days ago: ", five_days_ago)
+print()
 
 #task 2
-def evennums(n2):
-    for i in range(n):
-        if i % 2 == 0:
-            print(i)
-
-n2 = int(input("n2: "))
-evennums(n2)
+today2 = datetime.date.today()
+ordinal2 = today.toordinal()
+yesterday = datetime.date.fromordinal(ordinal2 - 1)
+tomorrow = datetime.date.fromordinal(ordinal2 + 1)
+print("Yesterday: ", yesterday)
+print("Tomorrow: ", tomorrow)
 print()
-
 
 #task 3
-def divisibleby(n3):
-    for i in range(n3):
-        if i % 3 == 0 and i % 4 == 0:
-            print(i)
-
-n3 = int(input("n3: "))
-divisibleby(n3)
+time = datetime.datetime.now()
+no_microsecond = time.replace(microsecond=0)
+print("Time without microsecond: ", no_microsecond)
 print()
-
 
 #task 4
-def squares(a, b):
-    for i in range(a, b + 1):
-        yield i * i
+date1 = datetime.datetime(2024, 2, 20, 14, 30, 0)
+date2 = datetime.datetime(2024, 2, 21, 16, 45, 0)
 
-a = int(input("a: "))
-b = int(input("b: "))
-squares_list = list(squares(a, b))
-print(squares_list)
+seconds_difference = (date2-date1).total_seconds()
+print("seconds difference: ", seconds_difference)
 print()
-
-
-#task 5
-def reverse(n4):
-    for x in range(n4, 0, -1):
-        yield x
-
-n4 = int(input('n4: '))
-new_list = list(reverse(n4))
-print(new_list)
