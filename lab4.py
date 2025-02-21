@@ -1,51 +1,52 @@
-# Iterators
+#task 1
+def generatorTillN(n):
+    for i in range (1, n):
+        print(i**2)
 
-mytuple = ("apple", "banana", "orange")
-myit = iter(mytuple)
-
-print(next(myit))
-print(next(myit))
-print(next(myit))
-print()
-
-mystring = "banana"
-myit1 = iter(mystring)
-
-print(next(myit1))
-print(next(myit1))
-print(next(myit1))
-print(next(myit1))
-print(next(myit1))
-print(next(myit1))
+n = int(input("Enter number n: "))
+generatorTillN(n)
 print()
 
 
-#looping Through an iterator
+#task 2
+def evennums(n2):
+    for i in range(n):
+        if i % 2 == 0:
+            print(i)
 
-for it in mytuple:
-    print(it)
+n2 = int(input("n2: "))
+evennums(n2)
 print()
 
-for it in mystring:
-    print(it)
+
+#task 3
+def divisibleby(n3):
+    for i in range(n3):
+        if i % 3 == 0 and i % 4 == 0:
+            print(i)
+
+n3 = int(input("n3: "))
+divisibleby(n3)
 print()
 
-# Create an Iterator
 
-class MyNumbers:
-    def __iter__(self):
-        self.a = 1
-        return self
-    
-    def __next__(self):
-        x = self.a
-        self.a += 1
-        return x
+#task 4
+def squares(a, b):
+    for i in range(a, b + 1):
+        yield i * i
 
-myclass = MyNumbers()
-myiter = iter(myclass)
+a = int(input("a: "))
+b = int(input("b: "))
+squares_list = list(squares(a, b))
+print(squares_list)
+print()
 
-for it in myiter:
-    print(it)
-    if it == 5:
-        break
+
+#task 5
+def reverse(n4):
+    for x in range(n4, 0, -1):
+        yield x
+
+n4 = int(input('n4: '))
+new_list = list(reverse(n4))
+print(new_list)
