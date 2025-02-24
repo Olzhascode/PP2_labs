@@ -1,33 +1,30 @@
-#task 1
-import datetime
+import math
 
-print()
-today = datetime.date.today()
-ordinal = today.toordinal()
-five_days_ago_ordinal = ordinal - 5
-five_days_ago = datetime.date.fromordinal(five_days_ago_ordinal)
-print("Five days ago: ", five_days_ago)
+# task 1 
+
+n = int(input('Enter degree: '))
+print('radian equal to ', n * (math.pi/180))
 print()
 
-#task 2
-today2 = datetime.date.today()
-ordinal2 = today.toordinal()
-yesterday = datetime.date.fromordinal(ordinal2 - 1)
-tomorrow = datetime.date.fromordinal(ordinal2 + 1)
-print("Yesterday: ", yesterday)
-print("Tomorrow: ", tomorrow)
-print()
 
-#task 3
-time = datetime.datetime.now()
-no_microsecond = time.replace(microsecond=0)
-print("Time without microsecond: ", no_microsecond)
-print()
+# task 2
 
-#task 4
-date1 = datetime.datetime(2024, 2, 20, 14, 30, 0)
-date2 = datetime.datetime(2024, 2, 21, 16, 45, 0)
+h = int(input('Enter height: '))
+a = int(input('Enter first base: '))
+b = int(input('Enter second base: '))
+print('Area equal to: ', (a + b)*(h/2))
 
-seconds_difference = (date2-date1).total_seconds()
-print("seconds difference: ", seconds_difference)
-print()
+
+# task 3
+    
+s = int(input("Enter number of sides: "))
+l = int(input("Enter the length of a polygon: "))
+ar = s * (l ** 2) / (4 * math.tan(math.pi / s))
+print("Area equal to: ", ar)
+
+
+# task 4
+
+base = int(input('Enter base: '))
+height = int(input('Enter height:'))
+print('Area equal to: ', base * height)
