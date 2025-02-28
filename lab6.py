@@ -1,70 +1,85 @@
+import os
+
 # task 1
-my_list = [4, 5, 8, 3, 1, 8, 1, 3, 4, 8, 7, 6, 4, 1, 2, 5, 55, 6, 4, 21, 87]
-print(sum(my_list))
+def list_contents(path):
+    print("Checking path:", path)
+    if not os.path.exists(path):
+        print("Path does not exist!")
+        return
+    
+    dirs = []
+    files = []
+    everything = []
+    
+    for item in os.listdir(path):
+        full_path = os.path.join(path, item)
+        everything.append(item)
+        if os.path.isdir(full_path):
+            dirs.append(item)
+        elif os.path.isfile(full_path):
+            files.append(item)
+    
+    print("Directories:", dirs)
+    print("Files:", files)
+    print("Everything:", everything)
 
 # task 2
-mystring = input("Text something: ")
-count_uppercase = 0
-count_lowercase = 0
-for i in mystring:
-    if i.isupper() == True:
-        count_uppercase += 1
-    elif i.islower() == True:
-        count_lowercase += 1
-print('number of lowercase letters: ', count_lowercase)
-print('number of uppercase letters: ', count_uppercase)
+def check_access(path):
+    print("Checking access for:", path)
+    print("Exists?", os.path.exists(path))
+    print("Readable?", os.access(path, os.R_OK))
+    print("Writable?", os.access(path, os.W_OK))
+    print("Executable?", os.access(path, os.X_OK))
 
 # task 3
-
-text = input("Enter word: ")
-m = 0
-k = len(text) - 1
-flag = True
-while m < k:
-    if text[m] != text[k]:
-        flag = False
-        break
-    m += 1 
-    k -= 1
-if flag:
-    print("Palindrome")
-else:
-    print('Not palindrome')
+def check_path(path):
+    if os.path.exists(path):
+        print("Filename:", os.path.basename(path))
+        print("Directory:", os.path.dirname(path))
+    else:
+        print("Oops! Path does not exist.")
 
 # task 4
-
-import math
-import time
-
-def square_root_after_delay(number, delay_ms):
-
-    delay_seconds = delay_ms / 1000.0  
-    time.sleep(delay_seconds)  
-
-    square_root = pow(number, 0.5)
-    print(f"Square root of {number} after {delay_ms} milliseconds is {square_root}")
-
-number = int(input("Enter number: "))
-delay = int(input("Enter milliseconds: "))
-square_root_after_delay(number, delay)
+def count_lines(filename):
+    try:
+        with open(filename, 'r') as file:
+            line_count = sum(1 for line in file)
+            print(f"The file '{filename}' has {line_count} lines.")
+    except FileNotFoundError:
+        print("File not found!")
 
 # task 5
+def write_list_to_file(filename, data):
+    with open(filename, 'w') as file:
+        for item in data:
+            file.write(item + "\n")
+    print("Data written to", filename)
 
-def is_all_true(tuple):
-    return all(tuple)
+# task 6
+def generate_text_files():
+    for i in range(26):
+        filename = f"{chr(65 + i)}.txt"
+        with open(filename, 'w') as file:
+            file.write(f"This is {filename}")
+        print("Created:", filename)
 
-my_tuple = ()
-empty_list = []
-flag = True
-while flag:
-    i = input("Enter element of tuple (enter q to stop): ")
-    if i == 'q':
-        flag = False
-        break
-    empty_list.append(i)
-my_tuple = tuple(empty_list)
-con = is_all_true(my_tuple)
-if con:
-    print("all elements are True")
-else:
-    print("not all elements are True")
+# task 7
+def copy_file(source, destination):
+    try:
+        with open(source, 'r') as src, open(destination, 'w') as dst:
+            for line in src:
+                dst.write(line)
+        print("Copied contents from", source, "to", destination)
+    except FileNotFoundError:
+        print("Source file not found!")
+
+# task 8
+def delete_file(path):
+    if os.path.exists(path):
+        if os.access(path, os.W_OK):
+            os.remove(path)
+            print("File deleted:", path)
+        else:
+            print("No permission to delete the file!")
+    else:
+        print("File does not exist!")
