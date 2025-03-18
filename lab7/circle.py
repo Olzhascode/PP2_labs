@@ -34,13 +34,22 @@ while run:
         y -= 20
     if keys[pygame.K_DOWN]:
         y += 20
+    if keys[pygame.K_LEFT]:
+        x -= 20
+    if keys[pygame.K_RIGHT]:
+        x += 20
     
+
+
     # Borders
     if y - radius < 0:
         y = radius
     elif y + radius > height:
         y = height - radius
-
+    elif x - radius < 0:
+        x = radius
+    elif x + radius > width:
+        x = width - radius
     # Circle
     pygame.draw.circle(display, (255, 0, 0), (x, y), radius)
     #
