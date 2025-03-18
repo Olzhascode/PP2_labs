@@ -1,32 +1,51 @@
 import pygame, sys
 from pygame.locals import *
+import time
 
 pygame.init()
 
-height = 800
-width = 600
-
-
-display = pygame.display.set_mode((height, width))
+# Display
+height = 600
+width = 800
+display = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Circle")
-run = True
-display.fill((255, 255, 255))
+
+# circle coordinates
 x = 400
 y = 300
+radius = 25
 
+#FPS
+FPS = 60
+clock = pygame.time.Clock()
+
+# Main cycle
+run = True
 while run:
-
+    display.fill((255, 255, 255))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
-            pygame.quit()
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP:
-                y -= 20
-            if event.key == pygame.K_DOWN:
-                y += 20    
-    pygame.draw.circle(display, (255, 0, 0), (x, y), 25)
-    pygame.display.update()
 
+    
+    # Movement
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_UP]:
+        y -= 20
+    if keys[pygame.K_DOWN]:
+        y += 20
+    
+    # Borders
+    if y - radius < 0:
+        y = radius
+    elif y + radius > height:
+        y = height - radius
 
+    # Circle
+    pygame.draw.circle(display, (255, 0, 0), (x, y), radius)
+    #
+    pygame.display.flip()
 
+    clock.tick(FPS)
+pygame.quit()
+sys.exit()
