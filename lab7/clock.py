@@ -21,14 +21,24 @@ left_hand = pygame.image.load("")
 centerX = width//2
 centerY = height//2
 
+# Function to draw hands
+def draw(hand, angle, centerX, centerY, display):
+    RotatedHand = pygame.transform.rotate(hand, angle)
+    HandRect = RotatedHand.get_rect(center = (centerX, centerY))
+    display.blit(RotatedHand, HandRect) 
 
 
 run = True
 while run:
-    display.fill((255,255, 255))
+    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
+
+
+
+
+    display.fill((255,255, 255))
     pygame.display.update()
     clock.tick(FPS)
 
