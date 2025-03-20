@@ -1,6 +1,5 @@
 import pygame, sys
 from pygame.locals import *
-import time
 
 pygame.init()
 
@@ -16,7 +15,7 @@ y = 300
 radius = 25
 
 #FPS
-FPS = 60
+FPS = 144
 clock = pygame.time.Clock()
 
 # Main cycle
