@@ -1,5 +1,5 @@
 import pygame, sys
-
+import datetime
 pygame.init()
 
 # Display
@@ -8,6 +8,20 @@ height = 600
 FPS = 60
 clock = pygame.time.Clock()
 display = pygame.display.set_mode((width, height))
+pygame.display.set_caption("Mickey Mouse clock")
+
+# Images
+main_img = pygame.image.load()
+main_img = pygame.transform.scale(main_img, (width, height))
+
+right_hand = pygame.image.load("")
+left_hand = pygame.image.load("")
+
+# Coordnates
+centerX = width//2
+centerY = height//2
+
+
 
 run = True
 while run:
