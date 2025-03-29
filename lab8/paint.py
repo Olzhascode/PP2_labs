@@ -24,11 +24,12 @@ color = "red"
 
 # Modes
 mode_draw = "Draw"
-mode_erase = "Erase"
 radius = 10
 mode = mode_draw # defualt mode
 mouse_down = False
 running = True
+
+starting_position = None
 
 while running:
     screen.fill(WHITE)
@@ -37,16 +38,26 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        # Colors
         if event.type == pygame.KEYDOWN:
-            if event.key == event.K_r:
+            if event.key == pygame.K_r:
                 color = "red" 
-            elif event.key == event.K_g:
+            elif event.key == pygame.K_g:
                 color = "green"
-            elif event.key == event.K_b:
+            elif event.key == pygame.K_b:
                 color = "blue"
-            elif event.key == event.K_e:
+            elif event.key == pygame.K_e:
                 color = "erase"
-            
+            elif event.key == pygame.K_c:
+                canvas.fill(WHITE)
+        
+        # Mouse
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            mouse_down = True
+        elif event.type == pygame.MOUSEBUTTONUP:
+            mouse_down = False
+        elif event.type == pygame.MOUSEMOTION and mouse_down:
+            pygame.draw.circle(canvas, colors[color], event.pos, radius)
     pygame.display.flip()
 
 pygame.quit()
