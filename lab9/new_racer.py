@@ -20,10 +20,11 @@ WHITE = (255, 255, 255)
 SCREEN_WIDTH = 400
 SCREEN_HEIGHT = 600
 SPEED = 5
+N = 10
  
 #Create a screen 
 DISPLAYSURF = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
-pygame.display.set_caption("Game")
+pygame.display.set_caption("Racer")
 
 #Score
 score = 0
@@ -73,13 +74,14 @@ class Coin(pygame.sprite.Sprite):
         self.image = pygame.image.load("images/coin.png")
         self.rect = self.image.get_rect()
         self.rect.center = (random.randint(40,SCREEN_WIDTH-40), 0)    
+        self.value = random.randint(1, 5)
  
       def move(self):
         self.rect.move_ip(0,SPEED//2)
         if (self.rect.top > 600):
             self.rect.top = 0
             self.rect.center = (random.randint(40,SCREEN_WIDTH-40), 0)
-
+            self.value = random.randint(1, 5)
 
 #Setting up Sprites        
 P1 = Player()
@@ -109,9 +111,6 @@ while True:
 
     #Cycles through all events occuring  
     for event in pygame.event.get():
-        if event.type == INC_SPEED:
-              SPEED += 0.25
-           
         if event.type == QUIT:
             pygame.quit()
             sys.exit()
@@ -126,11 +125,15 @@ while True:
     #Score
     collected_coins = pygame.sprite.spritecollide(P1, coins, True)
     for coin in collected_coins:
-        score += 1
+        score += coin.value
         newcoin = Coin()
         coins.add(newcoin)
         all_sprites.add(newcoin)
     
+    # Increase speed every new 10 points
+    if score >= N:
+        SPEED += 0.5
+        N += 10
     score_text = f2.render(f"Your Score: {score}", True, BLACK) 
     DISPLAYSURF.blit(score_text, (10, 10))
 
