@@ -6,7 +6,7 @@ pygame.init()
 
 # Display
 FPS = 10
-FPS_MAX = 26
+FPS_MAX = 40
 FramePerSec = pygame.time.Clock()
 
 Width, Height, Grid = 800, 800, 20
@@ -19,10 +19,22 @@ snake = [(100, 100), (80, 100), (60, 100)]
 direction = "RIGHT"
 food = (random.randint(0, Width // Grid - 1) * Grid,
         random.randint(0, Height // Grid - 1) * Grid)
+# generate food
+food_weight = random.randint(1, 3)
+def generate_food():
+    global food, food_weight, food_timer
+    food = (random.randint(0, Width // Grid - 1) * Grid,
+                random.randint(0, Height // Grid - 1) * Grid)
+    food_weight = random.randint(1, 3) # random weight of food
+    food_timer = 0
 
 def draw_food():
     pygame.draw.rect(display, (189, 17, 11), (food[0], food[1], Grid, Grid))
 draw_food()
+
+# food timer
+food_timer = 0
+food_time_max = 60
 
 #Game Over and Score
 score = 0
@@ -71,13 +83,19 @@ while True:
         
     #Checking if a snake has eaten food
     if (x, y) == food:
-        food = (random.randint(0, Width // Grid - 1) * Grid,
-                random.randint(0, Height // Grid - 1) * Grid)
-        score += 1
+        score += food_weight
+        generate_food()
+        food_timer = 0
         if score % 5 == 0:
             FPS = min(FPS + 2, FPS_MAX)
     else:
         snake.pop()
+
+    #food timer
+    food_timer += 1
+    if food_timer >= food_time_max:
+        generate_food()
+        
 
     #Adding new part of snake
     snake.insert(0, (x, y))
