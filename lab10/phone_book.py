@@ -73,3 +73,36 @@ def delete_entry():
 
     conn.commit()
     print("Entry deleted.")
+
+    # Menu
+def menu():
+    while True:
+        print("\nPhoneBook Menu:")
+        print("1. Insert from CSV")
+        print("2. Insert from Console")
+        print("3. Update Entry")
+        print("4. Search Entries")
+        print("5. Delete Entry")
+        print("6. Exit")
+
+        choice = input("Choose an option: ")
+        if choice == '1':
+            insert_from_csv("phonebook_data.csv")
+        elif choice == '2':
+            insert_from_console()
+        elif choice == '3':
+            update_entry()
+        elif choice == '4':
+            search_entries()
+        elif choice == '5':
+            delete_entry()
+        elif choice == '6':
+            break # Exit
+        else:
+            print("Invalid option. Try again.")
+
+menu()
+
+cur.close()
+conn.close()
+
