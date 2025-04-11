@@ -1,18 +1,54 @@
-import pygame, sys
+import pygame, sys, psycopg2
 from pygame.locals import *
 import random, time
 from collections import deque
 
 pygame.init()
 
-# Display
+# Connect to the database
+conn = psycopg2.connect(
+    dbname="snake_db",
+    user="postgres",
+    password="Kesha2412:)",
+    host="localhost",
+    port="5432"
+)
+cur = conn.cursor()
+
+# Display settings
 FPS = 10
 FPS_MAX = 40
 FramePerSec = pygame.time.Clock()
 
+def get_player_name():
+    name = ''
+    font_big = pygame.font.SysFont(None, 48)
+    font_small = pygame.font.SysFont(None, 32)
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN and name:
+                    return name
+                elif event.key == pygame.K_BACKSPACE:
+                    name = name[:-1]
+                else:
+                    name += event.unicode if event.unicode.isprintable() else ''
+
+        display.fill((0, 0, 0))
+        display.blit(font_big.render("Enter your nickname:", True, (255, 255, 255)), (200, 300))
+        display.blit(font_small.render(name, True, (224, 224, 11)), (200, 360))
+        pygame.display.flip()
+
+
 Width, Height, Grid = 800, 800, 20
 display = pygame.display.set_mode((Width, Height))
 pygame.display.set_caption("Snake")
+nickname = get_player_name()
+
 
 # Snake and Food
 snake = [(100, 100), (80, 100), (60, 100)]
@@ -23,7 +59,7 @@ food_weight = random.randint(1, 3)
 
 # Walls per level 
 levels = [
-    [],  # Level 1 — no walls
+    [],  
     [(x, 200) for x in range(300, 500, Grid)],
     [(400, y) for y in range(300, 500, Grid)],  
     [(x, 400) for x in range(100, 300, Grid)] + [(x, 400) for x in range(500, 700, Grid)]  
@@ -35,6 +71,7 @@ walls = levels[current_level]
 food_timer = 0
 food_time_max = 60
 
+# Check if the food is reachable 
 def is_food_reachable(start, target):
     visited = set()
     queue = deque()
@@ -54,6 +91,7 @@ def is_food_reachable(start, target):
                 visited.add((nx, ny))
     return False
 
+# Generate new food at a reachable location
 def generate_food():
     global food, food_weight, food_timer
     attempts = 0
@@ -67,6 +105,7 @@ def generate_food():
     food_weight = random.randint(1, 3)
     food_timer = 0
 
+# Draw the food on the screen
 def draw_food():
     pygame.draw.rect(display, (189, 17, 11), (food[0], food[1], Grid, Grid))
 
@@ -75,16 +114,48 @@ score = 0
 font = pygame.font.Font(None, 56)
 font2 = pygame.font.Font(None, 36)
 text = font.render("Game Over", 1, (224, 224, 11))
+
+
 def game_over():
+    global score, nickname
     display.blit(text, (300, 300))
     text_score = font2.render(f"Total Score: {score}", True, (224, 224, 11))
     display.blit(text_score, (330, 350))
     pygame.display.flip()
-    time.sleep(5)
+    time.sleep(2)
+    insert(nickname, score, current_level)  # Save score and nickname to DB
     pygame.quit()
     sys.exit()
 
-# Main Loop
+
+def insert(nickname, score, current_level):
+    # Check if player already exists
+    cur.execute("SELECT score FROM snake_player_db WHERE nickname = %s", (nickname,))
+    result = cur.fetchone()
+
+    if result:
+        old_score = result[0]
+        print(f"Existing score for {nickname}: {old_score}, New score: {score}")
+        if score > old_score:
+            cur.execute("""
+                UPDATE snake_player_db
+                SET score = %s, level = %s
+                WHERE nickname = %s
+            """, (score, current_level, nickname))
+            print("Score updated.")
+        else:
+            print("New score is not higher. No update.")
+    else:
+        cur.execute("""
+            INSERT INTO snake_player_db (nickname, score, level)
+            VALUES (%s, %s, %s)
+        """, (nickname, score, current_level))
+        print("New player inserted.")
+
+    conn.commit()
+
+
+# Main game loop
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -107,7 +178,7 @@ while True:
     if direction == "LEFT": x -= Grid
     if direction == "RIGHT": x += Grid
 
-    # Check for collisions
+    # Check for collisions with walls or snake's body
     if (x >= Width or x < 0 or y < 0 or y >= Height) or (x, y) in snake[1:] or (x, y) in walls:
         game_over()
 
@@ -129,14 +200,14 @@ while True:
     if food_timer >= food_time_max:
         generate_food()
 
-    # Add new head
+    # Add new head to the snake
     snake.insert(0, (x, y))
 
-    # Draw everything
+    # Draw everything on the screen
     display.fill("BLACK")
     draw_food()
 
-    # Draw snake
+    # Draw the snake
     for segment in snake:
         pygame.draw.rect(display, (13, 117, 16), (segment[0], segment[1], Grid, Grid))
 
@@ -144,7 +215,7 @@ while True:
     for wall in walls:
         pygame.draw.rect(display, (100, 100, 100), (wall[0], wall[1], Grid, Grid))
 
-    # Draw score
+    # Draw score and level
     text_score = font2.render(f"Score: {score}  Level: {current_level + 1}", True, (224, 224, 11))
     display.blit(text_score, (10, 10))
 
